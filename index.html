@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Online Cookie Parser</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">	
+	<style>
+		body {
+			background-color: #FAFAFA;
+		}
+		textarea {
+			width: 100%;
+			margin-top: 2pt;
+			height: 270pt;
+			resize: none;
+			font-family: droid sans mono, monospace, courier new, courier, sans-serif;
+			font-size: 13px;
+		}
+		#wrapper {
+			max-width: 1220px;
+			margin: 37pt auto;
+		}
+		.row {
+			margin-top: 20pt;
+		}
+		.stats {
+			float: right;
+			color: grey;
+		}
+	</style>
+</head>
+<body>	
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<a class="navbar-brand" href="#">Online Cookie Parser</a>
+	</nav>
+	<div id="wrapper" class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<button class="btn btn-xs btn-primary" id="parseCookiesBtn1">Parse Cookies</button>
+				<textarea id="input1"></textarea>	
+			</div>
+			<div class="col-md-6">
+				<span>Parsed Cookies (sorted)</span>
+				<span class="stats" id="numberOfCookies1"># cookies</span>
+				<textarea id="output1" readonly></textarea>	
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<button class="btn btn-xs btn-primary" id="parseCookiesBtn2">Parse Cookies</button>
+				<textarea id="input2"></textarea>	
+			</div>
+			<div class="col-md-6">
+				<span>Parsed Cookies (sorted)</span>
+				<span class="stats" id="numberOfCookies2"># cookies</span>				
+				<textarea id="output2" readonly></textarea>	
+			</div>
+		</div>
+	</div>
+</body>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+
+	function parseCookies(rawCookiesString) {
+		rawCookiesString = rawCookiesString.replace('Cookie: ', '')
+		var split = rawCookiesString.split(";");
+		return split.sort(function (a, b) {return a.trim().toLowerCase().localeCompare(b.trim().toLowerCase())});
+	}
+
+	var $inputArea1 = $("#input1");
+	var $outputArea1 = $("#output1");
+	var $numberOfCookies1 = $("#numberOfCookies1");
+	
+	var $inputArea2 = $("#input2");
+	var $outputArea2 = $("#output2");
+	var $numberOfCookies2 = $("#numberOfCookies2");	
+ 
+ 	var onClickParseCookieButtonGen = function($input, $output, $stats) {
+		return (function onClickParseCookies(ev) {
+			var input = $input.val();
+			var sortedOutputArr = parseCookies(input);
+			
+			// print formatted
+			var formattedOut = "";
+			sortedOutputArr.forEach(function onEachOutput(v, i, arr) {
+				formattedOut += v.trim() + "\n\n";
+			})
+			$output.val(formattedOut);
+			
+			// stats
+			$stats.text(sortedOutputArr.length + " cookies")
+		}); 		
+ 	}
+ 
+	$("#parseCookiesBtn1").click(onClickParseCookieButtonGen($inputArea1, $outputArea1, $numberOfCookies1));
+	$("#parseCookiesBtn2").click(onClickParseCookieButtonGen($inputArea2, $outputArea2, $numberOfCookies2));
+	
+</script>
+</html>

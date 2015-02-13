@@ -63,6 +63,7 @@
 
 	function parseCookies(rawCookiesString) {
 		rawCookiesString = rawCookiesString.replace('Cookie: ', '')
+		rawCookiesString = rawCookiesString.replace('Cookie:', '')
 		var split = rawCookiesString.split(";");
 		return split.sort(function (a, b) {return a.trim().toLowerCase().localeCompare(b.trim().toLowerCase())});
 	}
